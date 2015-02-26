@@ -1,4 +1,5 @@
 var path = require('path');
+var fs = require('fs');
 var archive = require('../helpers/archive-helpers');
 var httpHelper = require('http-helpers.js');
 // require more modules/folders here!
@@ -8,19 +9,25 @@ var actions = {
     httpHelper.serveAssets(res, 'index.html', './public/')
   },
   'POST': function(req, res) {
-    // httpHelper.redirect(res, './public/loading.html');
-    // req.on('end', function() {
-    //   console.log(this);
-    // }, this);
-    //console.log(req['url']);
-
-
-    //console.log(httpHelper.getData(req));
     var targetURL = httpHelper.getUrl(req)
-    // get form value for URL
-    // check for null
+    if (targetURL === '') {
+      res.writeHead(404, httpHelper.headers);
+      res.end('No URL entered');
+    }
 
+    // read in sites.txt
+    var filePath = path.join(__dirname, '../archives/', 'sites.csv');
+    console.log(filePath);
+    var sites = fs.readFileSync(filePath, 'utf8');
+    console.log(sites);
+    // , function(err, data) {
+    //   if (err) {
+    //     return console.log(err);
+    //   }
 
+    //   console.log(data);
+    // });
+    // console.log(sites);
     // compare to sites.txt
       // if inside sites.txt already
         // call redirect function
