@@ -1,6 +1,6 @@
 var path = require('path');
 var archive = require('../helpers/archive-helpers');
-var httpHelper = require('http-helpers.js');
+var httpHelper = require('./http-helpers.js');
 // require more modules/folders here!
 
 var actions = {

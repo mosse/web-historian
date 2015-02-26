@@ -29,7 +29,7 @@ exports.getUrl = function(req, res) {
 
   req.on('end', function() {
     var targetURL = ((body + '').slice(4));
-    var filePath = path.join(__dirname, '../archives/', 'sites.csv');
+    var filePath = path.join(__dirname, '../archives/', 'sites.txt');
     var sites = fs.readFileSync(filePath, 'utf8');
     var sitesArr = sites.split(',')[0] === '' ? sites.split(',').slice(1) : sites.split(',');
 
@@ -37,7 +37,7 @@ exports.getUrl = function(req, res) {
       var targetFilePath = path.join('../archives/sites/', targetURL);
       exports.redirect(res, targetURL, targetFilePath);
     } else {
-      // Write site to sites.csv
+      // Write site to sites.txt
       sitesArr.push(targetURL);
       var sitesString = sitesArr.join(',');
       fs.writeFile(filePath, sitesString);
@@ -48,7 +48,7 @@ exports.getUrl = function(req, res) {
 
 // As you progress, keep thinking about what helper functions you can put here!
 exports.redirect = function(response, url, filePath) {
-  response.statusCode = 303;
+  response.statusCode = 302;
   response.writeHead("Location", url);
   fs.readFile(path.join(__dirname, filePath), function (err, data) {
     if (err) {

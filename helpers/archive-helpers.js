@@ -26,16 +26,27 @@ exports.initialize = function(pathsObj){
 // modularize your code. Keep it clean!
 
 exports.readListOfUrls = function(){
+  var sites = fs.readFileSync(exports.paths[list], 'utf8');
+  var sitesArr = sites.split(',')[0] === '' ? sites.split(',').slice(1) : sites.split(',');
+  return sitesArr;
 };
 
-exports.isUrlInList = function(){
-};
+// exports.isUrlInList = function(url){
+  // var arr = exports.readListOfUrls();
+  // if (arr.indexOf(url) !== -1) {
+  //   return true;
+  // }
+  // return false;
+// };
 
-exports.addUrlToList = function(){
-};
+// exports.addUrlToList = function(){
+// };
 
-exports.isURLArchived = function(){
+exports.isURLArchived = function(url){
+  return !!paths.join(exports.paths[archivedSites], url);
+
 };
 
 exports.downloadUrls = function(){
+
 };
