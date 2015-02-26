@@ -20,7 +20,18 @@ exports.serveAssets = function(response, filename, pathname) {
   })
 };
 
+exports.getUrl = function(req) {
+  var body = '';
 
+  req.on('data', function(chunk) {
+    body += chunk;
+  });
+
+  req.on('end', function() {
+    return ((body + '').slice(4));
+  });
+
+};
 
 // As you progress, keep thinking about what helper functions you can put here!
 exports.redirect = function(response, location) {

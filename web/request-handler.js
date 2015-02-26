@@ -9,7 +9,23 @@ var actions = {
   },
   'POST': function(req, res) {
     // httpHelper.redirect(res, './public/loading.html');
-    console.log('POST');
+    // req.on('end', function() {
+    //   console.log(this);
+    // }, this);
+    //console.log(req['url']);
+
+
+    //console.log(httpHelper.getData(req));
+    var targetURL = httpHelper.getUrl(req)
+    // get form value for URL
+    // check for null
+
+
+    // compare to sites.txt
+      // if inside sites.txt already
+        // call redirect function
+      // else
+        // add it to sites.txt and redirect to loading page
   },
   'OPTIONS': function() {
 
