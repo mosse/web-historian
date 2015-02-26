@@ -1,6 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
+var httpGet = require('http-request');
 
 /*
  * You will need to reuse the same paths many times over in the course of this sprint.
@@ -26,7 +27,7 @@ exports.initialize = function(pathsObj){
 // modularize your code. Keep it clean!
 
 exports.readListOfUrls = function(){
-  var sites = fs.readFileSync(exports.paths[list], 'utf8');
+  var sites = fs.readFileSync(exports.paths['list'], 'utf8');
   var sitesArr = sites.split(',')[0] === '' ? sites.split(',').slice(1) : sites.split(',');
   return sitesArr;
 };
@@ -43,10 +44,31 @@ exports.readListOfUrls = function(){
 // };
 
 exports.isURLArchived = function(url){
-  return !!paths.join(exports.paths[archivedSites], url);
-
+  fs.exists(path.join(exports.paths['archivedSites'], url), function(exists) {
+    return exists;
+  });
 };
 
 exports.downloadUrls = function(){
-
+  var arr = exports.readListOfUrls();
+  for (var i = 0; i < arr.length; i++){
+    var fileName = arr[i].replace('.','_');
+    if (!exports.isURLArchived(arr[i])) {
+        //retrieve data
+        httpGet.get('http://' + arr[i], function(err, res){
+          if (err){
+            console.log(err);
+            return;
+          }
+          var fileName = res.url.replace(/[^A-Za-z0-9]/g,'');
+          fs.writeFile(exports.paths['archivedSites'] + '/' + fileName, res.buffer.toString(), function (err, res) {
+            if (err) {
+                console.log(err);
+            return;
+            }
+            console.log(fileName + ' written!');
+          });
+        });
+    }
+  }
 };
