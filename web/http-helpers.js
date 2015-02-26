@@ -20,7 +20,7 @@ exports.serveAssets = function(response, filename, pathname) {
   })
 };
 
-exports.getUrl = function(req) {
+exports.getUrl = function(req, res) {
   var body = '';
 
   req.on('data', function(chunk) {
@@ -28,9 +28,24 @@ exports.getUrl = function(req) {
   });
 
   req.on('end', function() {
-    return ((body + '').slice(4));
-  });
+    var targetURL = ((body + '').slice(4));
+    var filePath = path.join(__dirname, '../archives/', 'sites.csv');
+    var sites = fs.readFileSync(filePath, 'utf8');
+    var sitesArr = sites.split(',')[0] === '' ? sites.split(',').slice(1) : sites.split(',');
 
+    if (sitesArr.indexOf(targetURL) !== -1) {
+      console.log("Site exists!");
+        // call redirect function
+        exports.redirect(res, 'www.google.com');
+    } else {
+      // Write site to sites.csv
+      sitesArr.push(targetURL);
+      console.log(sitesArr);
+      var sitesString = sitesArr.join(',');
+      fs.writeFile(filePath, sitesString);
+      exports.redirect(res, 'loading.html');
+    }
+  });
 };
 
 // As you progress, keep thinking about what helper functions you can put here!
