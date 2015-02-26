@@ -34,7 +34,7 @@ exports.getUrl = function(req, res) {
     var sitesArr = sites.split(',')[0] === '' ? sites.split(',').slice(1) : sites.split(',');
 
     if (sitesArr.indexOf(targetURL) !== -1) {
-      var targetFilePath = path.join('../archives/sites/', targetURL);
+      var targetFilePath = path.join('../archives/sites/', 'httpwww' + targetURL.replace(/[^A-Za-z0-9]/g,''));
       exports.redirect(res, targetURL, targetFilePath);
     } else {
       // Write site to sites.txt
