@@ -34,13 +34,11 @@ exports.getUrl = function(req, res) {
     var sitesArr = sites.split(',')[0] === '' ? sites.split(',').slice(1) : sites.split(',');
 
     if (sitesArr.indexOf(targetURL) !== -1) {
-      console.log("Site exists!");
-        // call redirect function
-        // exports.redirect(res, 'www.google.com');
+      var targetFilePath = path.join('../archives/sites/', targetURL);
+      exports.redirect(res, targetURL, targetFilePath);
     } else {
       // Write site to sites.csv
       sitesArr.push(targetURL);
-      console.log(sitesArr);
       var sitesString = sitesArr.join(',');
       fs.writeFile(filePath, sitesString);
       exports.redirect(res, 'http://127.0.0.1:8080/loading.html', '../web/public/loading.html');
