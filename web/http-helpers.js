@@ -36,22 +36,28 @@ exports.getUrl = function(req, res) {
     if (sitesArr.indexOf(targetURL) !== -1) {
       console.log("Site exists!");
         // call redirect function
-        exports.redirect(res, 'www.google.com');
+        // exports.redirect(res, 'www.google.com');
     } else {
       // Write site to sites.csv
       sitesArr.push(targetURL);
       console.log(sitesArr);
       var sitesString = sitesArr.join(',');
       fs.writeFile(filePath, sitesString);
-      exports.redirect(res, 'loading.html');
+      exports.redirect(res, 'http://127.0.0.1:8080/loading.html', '../web/public/loading.html');
     }
   });
 };
 
 // As you progress, keep thinking about what helper functions you can put here!
-exports.redirect = function(response, location) {
+exports.redirect = function(response, url, filePath) {
   response.statusCode = 303;
-  response.setHeader("Location", location);
-  response.end();
+  response.writeHead("Location", url);
+  fs.readFile(path.join(__dirname, filePath), function (err, data) {
+    if (err) {
+      console.log(err);
+    }
+    response.write(data.toString());
+    response.end();
+  });
 };
 
